@@ -1,0 +1,126 @@
+https://www.sitepoint.com/building-facebook-chat-bot-node-heroku/
+
+
+
+https://developers.facebook.com/docs/messenger-platform/introduction/conversation-components
+
+
+https://www.facebook.com/messages/t/215621505702007
+
+    https://www.facebook.com/messages/t/215621505702007
+
+
+
+
+1741696359257174
+
+1741696359257174
+
+1741696359257174
+
+1466908513418952
+
+
+
+curl -X POST -H "Content-Type: application/json" -d '{
+  "recipient":{
+    "id":"<PSID>"
+  },
+  "message":{
+    "text": "Here is a quick reply!",
+    "quick_replies":[
+      {
+        "content_type":"text",
+        "title":"Search",
+        "payload":"<POSTBACK_PAYLOAD>",
+        "image_url":"http://example.com/img/red.png"
+      },
+      {
+        "content_type":"location"
+      }
+    ]
+  }
+}' "https://graph.facebook.com/v2.6/me/messages?access_token=<PAGE_ACCESS_TOKEN>"
+
+
+ "recipient":{
+    "id":"<PSID>"
+  },
+  "message":{
+    "text": "Here is a quick reply!",
+    "quick_replies":[
+      {
+        "content_type":"text",
+        "title":"good",
+        "payload":"<POSTBACK_PAYLOAD>"
+      },
+      {
+        "content_type":"text",
+        "title":"better",
+        "payload":"<POSTBACK_PAYLOAD>"
+      },
+      {
+        "content_type":"text",
+        "title":"average",
+        "payload":"<POSTBACK_PAYLOAD>"
+      }
+     
+    ]
+  }
+
+
+
+    var messageData = {
+        recipient: {
+            id: sender_id
+        },
+
+        message:{
+            "text": "Here is a quick reply!",
+            "quick_replies":[
+                {
+                    "content_type":"text",
+                    "title":"good",
+                    "payload":"good"
+                },
+                {
+                    "content_type":"text",
+                    "title":"better",
+                    "payload":"better"
+                },
+                {
+                    "content_type":"text",
+                    "title":"average",
+                    "payload":"average"
+                }
+            ]
+        }
+    };    
+
+
+
+
+
+     var query = "UPDATE  `events` SET "; 
+                query+= "`rating` = '"+rating_value+"' ";
+                query+= "WHERE `event_id` = '"+event_id+"'"; 
+
+                //console.log(query);
+
+                con.query(query, function(err,result){
+                
+                
+                // send message from here to user back
+
+                var messageData = {
+                  recipient: {
+                    id: sender_id
+                  },
+                  message: {
+                    "text": "Sounds good,your volunteer hours registered successfully."
+                  }
+                };
+
+                callSendAPI(messageData);
+
+                }); // end of connection

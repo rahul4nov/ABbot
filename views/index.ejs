@@ -1,0 +1,105 @@
+<html>
+<head>
+
+<title>Express App</title>
+
+<script src="https://code.jquery.com/jquery-2.2.3.js"></script>
+<script src="https://code.jquery.com/jquery-2.2.4.js"></script>
+</head>
+
+<script type="text/javascript">
+
+$(document).ready(function() {
+$("#first_name_status").hide();
+$("#last_name_status").hide();
+$("#email_status").hide();
+
+    // on load get registered volunteers details from database
+    $.ajax({
+				type: 'GET',
+				//data: JSON.stringify(data),
+				contentType: 'application/json',
+                url: 'http://localhost:80/volunteers/display',						
+                success: function(result) {
+                    console.log(result);
+
+                    $.each(result, function (index, value) {
+                        console.log(value.volunteer_id);
+                   
+                        $('#messanger_id').append('<option value="' + value.volunteer_messanger_id + '">' + value.volunteer_name + '</option>');
+                    }); // end of each function
+
+                } // end  of success
+
+    }); // end of ajax function
+
+
+
+    $('#save_details').click(function()
+    {    
+        var messanger_id = $("#messanger_id").val();
+        //alert(messanger_id);
+        var data = {};
+        data.messanger_id = messanger_id;
+
+    	$.ajax({
+						type: 'POST',
+						data: JSON.stringify(data),
+				        contentType: 'application/json',
+                        url: 'http://localhost:80/event/push',						
+                        success: function() {
+                           // console.log('success');
+                           // console.log(JSON.stringify(data));
+						  window.location.reload(true); 
+                        } // end  of success
+
+        }); // end of ajax function
+        
+	}); // end of save details 
+	
+}); // end of document ready function
+</script>
+
+
+
+
+<body>
+
+<% if(errors != undefined){ %>
+<ul>
+    <% errors.forEach(function(error){ %>
+       <li><%= error.msg  %></li>
+    <% }) %>
+</ul>
+<% } %>
+
+<form data-parsley-validate>
+    <div>
+        <label>Messanger Id</label> 
+        <!--<input type="text"  id="messanger_id"  name="Messanger"/>-->
+        <select id="messanger_id">
+           <!-- <option value="1466908513418952">Cameron Dixit</option>
+            <option value="1741696359257174">Rick Robin</option>-->
+        </select>
+		
+    </div>
+	
+    <!--<div >
+        <label>last Name *</label> 
+        <input type="text"  id="last_name"  name="last_name"    required="required" />
+		<div id="last_name_status" style="color:red;">Last Name is Empty </div>
+    </div>
+    <div >
+        <label>Email</label>
+         <input type="text" id="email"  name="email"  required="required"/>
+		 <div id="email_status" style="color:red;">Email is Empty </div>
+    </div>-->
+
+   
+    <button id="save_details" type="button">submit</button>
+
+</form>
+
+
+</body>
+</html>
